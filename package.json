@@ -1,0 +1,38 @@
+{
+  "name": "mango-range",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite --port 8080",
+    "build": "vite build",
+    "preview": "vite preview --port 8080",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:update": "vitest -u"
+  },
+  "keywords": [],
+  "author": "Dídac Pérez",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "react-router-dom": "^7.9.2"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.4.0",
+    "@testing-library/jest-dom": "6.8.0",
+    "@testing-library/react": "16.3.0",
+    "@types/react": "19.1.13",
+    "@types/react-dom": "19.1.9",
+    "@vitejs/plugin-react": "5.0.3",
+    "eslint": "9.36.0",
+    "jsdom": "27.0.0",
+    "sass": "^1.93.2",
+    "typescript": "5.9.2",
+    "typescript-eslint": "8.44.1",
+    "vite": "7.1.7",
+    "vitest": "3.2.4"
+  }
+}

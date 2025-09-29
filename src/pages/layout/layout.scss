@@ -1,0 +1,47 @@
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  height: 100dvh;
+  overflow: hidden;
+
+  &__sidebar {
+    background: var(--bg-sidebar, var(--bg));
+    color: var(--fg);
+    border-right: 1px solid var(--border);
+    padding: 1rem;
+  }
+
+  &__title {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  &__nav {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  &__link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    color: var(--fg);
+    text-decoration: none;
+    border: 1px solid transparent;
+
+    &--active {
+      background-color: var(--accent);
+      color: var(--bg);
+    }
+
+    &:not(&--active):hover {
+      background-color: var(--accent-weak);
+    }
+  }
+
+  &__content {
+    background: var(--bg-content, var(--bg));
+    padding: 1rem;
+    overflow: auto;
+  }
+}

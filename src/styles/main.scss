@@ -1,0 +1,52 @@
+:root {
+  --bg: #f6f7f6;
+  --bg-sidebar: #eef1ee;
+  --bg-content: #fafbfa;
+  --panel: #ffffff;
+  --fg: #1f2937;
+  --border: #e3e7e1;
+  --accent: #6b8f71;
+  --accent-weak: color-mix(in srgb, var(--accent) 20%, transparent);
+  --danger: #dc2626;
+  --danger-weak: color-mix(in srgb, var(--danger) 20%, transparent);
+}
+
+/* ===== Reset ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Ubuntu,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Defaults ===== */
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  text-decoration: none;
+}
