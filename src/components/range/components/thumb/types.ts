@@ -13,3 +13,5 @@ export type ThumbProps = {
   counterpartValue?: number;
   step?: number
 };
+
+export type TrackInfo = { left: number; width: number };

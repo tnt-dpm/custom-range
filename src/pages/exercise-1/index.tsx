@@ -5,7 +5,7 @@ import { MinMax } from '../../services/types';
 
 export const ExerciseOne = () => {
   const { data: limits, loading, error } = useFetch<MinMax>('/range.json');
-  const [values, setValues] = useState<MinMax | undefined>();
+  const [values, setValues] = useState<MinMax | undefined>({ min: 70, max: 10 });
 
   if (loading) return <p>Loading…</p>;
   if (error) return <p role="alert">Error: {error}</p>;

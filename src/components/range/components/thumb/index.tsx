@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { Role, ThumbProps } from './types';
+import { ThumbProps } from './types';
+import {
+  getTrackInfo,
+  normalizeStep,
+  getPointerPercent,
+  valueFromPercent,
+  roundToClosestStep,
+  getAllowedLimits,
+  keepWithinLimits,
+  getThumbZIndex,
+} from './utils';
 
 const Thumb = ({
   trackRef,
@@ -14,34 +24,20 @@ const Thumb = ({
   const [isDragging, setIsDragging] = useState(false);
 
   const updateValueFromClientX = (clientX: number) => {
-    const trackElement = trackRef.current;
-    if (!trackElement || max === min) return;
+    if (max === min) return;
 
-    const { left: trackLeft, width: trackWidth } =
-      trackElement.getBoundingClientRect();
-    if (trackWidth <= 0) return;
+    const trackInfo = getTrackInfo(trackRef.current);
+    if (!trackInfo) return;
 
-    const effectiveStep = step > 0 ? step : 1;
-    const positionRatio = Math.min(
-      1,
-      Math.max(0, (clientX - trackLeft) / trackWidth),
-    );
-    const continuousValue = min + positionRatio * (max - min);
-    const snappedValue =
-      Math.round((continuousValue - min) / effectiveStep) * effectiveStep + min;
+    const stepSize = normalizeStep(step);
+    const pointerPercent = getPointerPercent(clientX, trackInfo);
+    const valueAtPointer = valueFromPercent(pointerPercent, min, max);
+    const steppedValue = roundToClosestStep(valueAtPointer, stepSize, min);
 
-    let lowerBound = role === Role.max ? counterpartValue ?? min : min;
-    let upperBound = role === Role.min ? counterpartValue ?? max : max;
+    const { start, end } = getAllowedLimits(role, counterpartValue, min, max);
+    const nextValue = keepWithinLimits(steppedValue, start, end);
 
-    if (lowerBound > upperBound) {
-      lowerBound = min;
-      upperBound = max;
-    }
-    const clampedValue = Math.min(
-      upperBound,
-      Math.max(lowerBound, snappedValue),
-    );
-    setValue(clampedValue);
+    setValue(nextValue);
   };
 
   const handlePointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
@@ -61,10 +57,12 @@ const Thumb = ({
     setIsDragging(false);
   };
 
+  const zIndex = getThumbZIndex(leftPercent, role);
+
   return (
     <button
       className="range__button"
-      style={{ left: `${leftPercent}%` }}
+      style={{ left: `${leftPercent}%`, zIndex }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
