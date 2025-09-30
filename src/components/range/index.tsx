@@ -10,7 +10,7 @@ const Range = ({
   min = 0,
   max = 10,
   options,
-  defaultValues = { min: 0, max: 10 },
+  defaultValues,
   onChange = () => {},
   step = 1,
 }: RangeProps) => {
@@ -29,12 +29,14 @@ const Range = ({
     return [min, max];
   }, [isFixed, sortedOptions, min, max]);
 
-  const [minValue, setMinValue] = useState(defaultValues.min ?? low);
-  const [maxValue, setMaxValue] = useState(defaultValues.max ?? high);
+  const [minValue, setMinValue] = useState(defaultValues?.min ?? low);
+  const [maxValue, setMaxValue] = useState(defaultValues?.max ?? high);
+
+  const isInverted = useMemo(() => minValue > maxValue, [minValue, maxValue]);
 
   useEffect(() => {
-    setMinValue(defaultValues.min ?? low);
-    setMaxValue(defaultValues.max ?? high);
+    setMinValue(defaultValues?.min ?? low);
+    setMaxValue(defaultValues?.max ?? high);
   }, [defaultValues, low, high]);
 
   const snap = (val: number) => {
@@ -87,53 +89,63 @@ const Range = ({
   };
 
   return (
-    <div className="range">
-      <LabelInput
-        min={low}
-        max={maxValue}
-        defaultValue={minValue}
-        onChange={handleChangeMinInput}
-        isFixed={isFixed}
-      />
 
-      <div className="range__track-container" ref={trackRef}>
-        <div className="range__track" />
-        <div
-          className="range__fill"
-          style={{
-            left: `${minPercentage}%`,
-            width: `${Math.max(0, maxPercentage - minPercentage)}%`,
-          }}
-        />
-        <Thumb
-          trackRef={trackRef}
-          leftPercent={minPercentage}
-          setValue={setMin}
+    <div className={`range ${isInverted ? 'range--has-error' : ''}`}>
+      <div className='range__container'>
+        <LabelInput
           min={low}
-          max={high}
-          role={Role.min}
-          counterpartValue={maxValue}
-          step={step}
+          max={isInverted ? high : maxValue}
+          defaultValue={minValue}
+          onChange={handleChangeMinInput}
+          isFixed={isFixed}
+          hasError={isInverted}
         />
-        <Thumb
-          trackRef={trackRef}
-          leftPercent={maxPercentage}
-          setValue={setMax}
-          min={low}
+
+        <div className="range__track-container" ref={trackRef}>
+          <div className="range__track" />
+          <div
+            className="range__fill"
+            style={{
+              left: `${minPercentage}%`,
+              width: `${Math.max(0, maxPercentage - minPercentage)}%`,
+            }}
+          />
+          <Thumb
+            trackRef={trackRef}
+            leftPercent={minPercentage}
+            setValue={setMin}
+            min={low}
+            max={high}
+            role={Role.min}
+            counterpartValue={maxValue}
+            step={step}
+          />
+          <Thumb
+            trackRef={trackRef}
+            leftPercent={maxPercentage}
+            setValue={setMax}
+            min={low}
+            max={high}
+            role={Role.max}
+            counterpartValue={minValue}
+            step={step}
+          />
+        </div>
+
+        <LabelInput
+          min={isInverted ? low : minValue}
           max={high}
-          role={Role.max}
-          counterpartValue={minValue}
-          step={step}
+          defaultValue={maxValue}
+          onChange={handleChangeMaxInput}
+          isFixed={isFixed}
+          hasError={isInverted}
         />
       </div>
-
-      <LabelInput
-        min={minValue}
-        max={high}
-        defaultValue={maxValue}
-        onChange={handleChangeMaxInput}
-        isFixed={isFixed}
-      />
+      {isInverted && (
+        <p id="range-error" className="range__error" role="alert">
+          Minimum value cannot be greater than maximum value.
+        </p>
+      )}
     </div>
   );
 };

@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { LabelInputProps } from './types';
 import './label-input.scss';
+import { Currency } from '../../../../enums/currency';
+import { KeyBoardKey } from '../../../../enums/keyboard';
 
 const LabelInput = ({
   min,
   max,
   defaultValue,
-  currency = '€',
+  currency = Currency.EURO,
   isFixed = false,
+  hasError = false,
   onChange,
   onKeyDown,
   onBlur,
@@ -22,16 +25,20 @@ const LabelInput = ({
   };
 
   const onKeyDownInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.key === 'Escape') {
+    if (event.key === KeyBoardKey.ENTER || event.key === KeyBoardKey.SCAPE) {
       setInputActive(false);
     }
     onKeyDown?.(event);
   };
 
   return (
-    <div className="label-input__container" onBlur={onBlurContainer}>
+    <div 
+      className={`label-input__container ${hasError ? 'label-input--has-error' : ''}`} 
+      onBlur={onBlurContainer}
+    >
       {isInputActive ? (
         <input
+          className='label-input__input'
           type="number"
           min={min}
           max={max}
@@ -44,7 +51,11 @@ const LabelInput = ({
         <label
           onClick={() => !isFixed && setInputActive(true)}
           onKeyDown={(event) => {
-            if ((event.key === 'Enter' || event.key === ' ') && !isFixed) {
+            if (
+              (event.key === KeyBoardKey.ENTER ||
+                event.key === KeyBoardKey.SPACE_BAR) &&
+              !isFixed
+            ) {
               event.preventDefault();
               setInputActive(true);
             }

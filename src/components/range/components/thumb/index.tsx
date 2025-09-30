@@ -30,9 +30,13 @@ const Thumb = ({
     const snappedValue =
       Math.round((continuousValue - min) / effectiveStep) * effectiveStep + min;
 
-    const lowerBound = role === Role.max ? counterpartValue ?? min : min;
-    const upperBound = role === Role.min ? counterpartValue ?? max : max;
+    let lowerBound = role === Role.max ? counterpartValue ?? min : min;
+    let upperBound = role === Role.min ? counterpartValue ?? max : max;
 
+    if (lowerBound > upperBound) {
+      lowerBound = min;
+      upperBound = max;
+    }
     const clampedValue = Math.min(
       upperBound,
       Math.max(lowerBound, snappedValue),

@@ -1,8 +1,16 @@
 .range {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    width: 500px;
+    text-align: center;
+    background-color: var(--panel);
+    padding: 1rem 2rem;
+    border: 1px solid var(--border);
+
+    &__container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
 
     &__track-container {
         position: relative;
@@ -52,5 +60,26 @@
         &--max {
             right: 0;
         }
+    }
+
+    &--has-error {
+        .range__track {
+            background-color: var(--danger-weak);
+        }
+
+        .range__fill {
+            background: var(--danger);
+        }
+
+        .range__button:hover {
+            background-color: var(--danger);
+        }
+    }
+
+    &__error {
+        margin-top: 6px;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        color: var(--danger);
     }
 }
